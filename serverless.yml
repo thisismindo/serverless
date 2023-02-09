@@ -1,0 +1,71 @@
+service: ${self:custom.project_name}
+frameworkVersion: '3'
+configValidationMode: error
+deprecationNotificationMode: warn:summary
+
+custom:
+  project_name: 'demo'
+  stage: ${opt:stage, 'dev'}
+  default_timeout: 30
+  default_lambda_memory_size: 128
+  warmup:
+    default:
+      name: ${self:custom.project_name}-${self:custom.stage}-warm-up
+      enabled: true
+      memorySize: 128
+      concurrency: 10
+      events:
+        - schedule: 'rate(5 minutes)'
+      tags:
+          service: demo
+          environment: ${self:custom.stage}
+      prewarm: true
+  iam:
+    role:
+      Fn::GetAtt:
+        - DemoServiceRole
+        - Arn
+
+provider:
+  name: aws
+  runtime: python3.9
+  region: ${opt:region, 'us-west-2'}
+  tags:
+    service: ${self:custom.project_name}
+    stage: ${self:custom.stage}
+  environment: ${file(serverless.env.yml):${self:custom.stage}.env}
+  deploymentBucket:
+    name: ${file(serverless.env.yml):${self:custom.stage}.deployment_bucket_name}
+    blockPublicAccess: true
+    tags:
+      service: ${self:custom.project_name}
+      environment: ${self:custom.stage}
+
+package:
+  individually: false
+  patterns:
+    - 'src/**'
+    - '!node_modules/**'
+    - '!packages/**'
+    - '!/**'
+    - '!README.md'
+    - '!Pipfile'
+    - '!Pipfile.lock'
+    - '!package.json'
+    - '!package-lock.json'
+    - '!resources.yml'
+    - '!layers.yml'
+    - '!lambdas.yml'
+
+resources:
+  Resources:
+    ${file(resources.yml):cf_resources}
+
+plugins:
+  - serverless-plugin-warmup
+
+layers:
+  ${file(layers.yml):layer}
+
+functions:
+  ${file(lambdas.yml):cf_lambdas}

@@ -1,0 +1,8 @@
+Pipfile
+Pipfile.lock
+package-lock.json
+.serverless/
+.warmup/
+.git/
+packages/python/lib/python3.9/site-packages/
+node_modules/

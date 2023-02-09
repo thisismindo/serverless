@@ -1,0 +1,23 @@
+cf_lambdas:
+  get_user:
+    handler: src/handlers/user/handler.get_user
+    description: get user info
+    timeout: ${self:custom.default_timeout}
+    memorySize: ${self:custom.default_lambda_memory_size}
+    events:
+      - httpApi:
+          path: /${self:custom.stage}/user/{param}
+          method: get
+    layers:
+      - !Ref DevLambdaLayer
+  get_order:
+    handler: src/handlers/order/handler.get_order
+    description: get order
+    timeout: ${self:custom.default_timeout}
+    memorySize: ${self:custom.default_lambda_memory_size}
+    events:
+      - httpApi:
+          path: /${self:custom.stage}/order/{param}
+          method: get
+    layers:
+      - !Ref DevLambdaLayer

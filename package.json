@@ -1,0 +1,13 @@
+{
+    "name": "serverless-demo",
+    "version": "1.0.0",
+    "description": "",
+    "keywords": [],
+    "author": "mindo silalahi",
+    "main": "index.js",
+    "license": "ISC",
+    "dependencies": {
+        "serverless": "^3.27.0",
+        "serverless-plugin-warmup": "^8.2.1"
+    }
+}
