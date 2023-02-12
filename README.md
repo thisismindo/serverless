@@ -13,8 +13,8 @@ A simple demonstration of aws lambda using python with api gateway and lambda la
 # Setup
 - install [aws-cli](https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html)
 - configure [aws-cli](https://docs.aws.amazon.com/cli/latest/reference/configure/)
-- update [vpc security group ids](https://github.com/thisismindo/serverless/blob/main/resources.yml#L13)
-- update [subnet ids](https://github.com/thisismindo/serverless/blob/main/resources.yml#L21-L23)
+- update [vpc security group ids](https://github.com/thisismindo/serverless/blob/main/resources.yml#L15)
+- update [subnet ids](https://github.com/thisismindo/serverless/blob/main/resources.yml#L23-L25)
 - install serverless framework
 ```sh
 > npm install -g serverless
