@@ -15,6 +15,12 @@ A simple demonstration of aws lambda using python with api gateway and lambda la
 - configure [aws-cli](https://docs.aws.amazon.com/cli/latest/reference/configure/)
 - update [vpc security group ids](https://github.com/thisismindo/serverless/blob/main/resources.yml#L15)
 - update [subnet ids](https://github.com/thisismindo/serverless/blob/main/resources.yml#L23-L25)
+- create s3 bucket
+```sh
+aws s3 mb s3://sls-dev-demo-582305 \
+  --region <REGION> \
+  --endpoint-url https://s3.<REGION>.amazonaws.com
+```
 - install serverless framework
 ```sh
 > npm install -g serverless
@@ -41,13 +47,14 @@ A simple demonstration of aws lambda using python with api gateway and lambda la
 # Tear Down
 ```sh
 > sls remove --stage dev
+> aws s3api delete-bucket --bucket <BUCKET_NAME>
 ```
 
 # Technical Specifications
 - Language(s)
-    - [python](https://www.python.org/)
+  - [python](https://www.python.org/)
 - Framework(s)
-    - [serverless](https://www.serverless.com/)
-    - [npm](https://www.npmjs.com/)
+  - [serverless](https://www.serverless.com/)
+  - [npm](https://www.npmjs.com/)
 - Platform
-    - [aws](https://aws.amazon.com/)
+  - [aws](https://aws.amazon.com/)
