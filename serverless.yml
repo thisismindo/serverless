@@ -13,18 +13,13 @@ custom:
       name: ${self:custom.project_name}-${self:custom.stage}-warm-up
       enabled: true
       memorySize: 128
-      concurrency: 10
+      concurrency: 2
       events:
         - schedule: 'rate(5 minutes)'
       tags:
           service: demo
           environment: ${self:custom.stage}
       prewarm: true
-  iam:
-    role:
-      Fn::GetAtt:
-        - DemoServiceRole
-        - Arn
 
 provider:
   name: aws
@@ -40,6 +35,8 @@ provider:
     tags:
       service: ${self:custom.project_name}
       environment: ${self:custom.stage}
+  iam:
+    role: ${file(serverless.env.yml):${self:custom.stage}.lambda_role}
 
 package:
   individually: false
@@ -63,6 +60,7 @@ resources:
 
 plugins:
   - serverless-plugin-warmup
+  - serverless-offline
 
 layers:
   ${file(layers.yml):layer}
