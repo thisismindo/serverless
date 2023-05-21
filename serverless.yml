@@ -20,6 +20,14 @@ custom:
           service: demo
           environment: ${self:custom.stage}
       prewarm: true
+  alerts:
+    dashboards: true
+    topics:
+      alarm:
+        topic: !Ref DemoSNS
+    alarms:
+      - functionThrottles
+      - functionErrors
 
 provider:
   name: aws
@@ -61,6 +69,7 @@ resources:
 plugins:
   - serverless-plugin-warmup
   - serverless-offline
+  - serverless-plugin-aws-alerts
 
 layers:
   ${file(layers.yml):layer}
