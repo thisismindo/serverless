@@ -1,4 +1,81 @@
 cf_resources:
+  DemoSensitiveDataLogGroup:
+    Type: AWS::Logs::LogGroup
+    Properties:
+      LogGroupName: demo-sensitive-records
+      RetentionInDays: "7"
+  GetUnderscoreuserLogGroup:
+    Type: AWS::Logs::LogGroup
+    Properties:
+      DataProtectionPolicy:
+        Name: GetUserDataProtectionPolicy
+        Description: Get user data protection policy
+        Version: "2021-06-01"
+        Statement:
+          - Sid: "demo-audit-policy"
+            DataIdentifier:
+              - arn:aws:dataprotection::aws:data-identifier/Name
+              - arn:aws:dataprotection::aws:data-identifier/IpAddress
+              - arn:aws:dataprotection::aws:data-identifier/DateOfBirth
+              - arn:aws:dataprotection::aws:data-identifier/PhoneNumber-US
+              - arn:aws:dataprotection::aws:data-identifier/ZipCode-US
+              - arn:aws:dataprotection::aws:data-identifier/Ssn-US
+              - arn:aws:dataprotection::aws:data-identifier/EmailAddress
+            Operation:
+              Audit:
+                FindingsDestination:
+                  CloudWatchLogs:
+                    LogGroup: !Ref DemoSensitiveDataLogGroup
+          - Sid: "demo-redact-policy"
+            DataIdentifier:
+              - arn:aws:dataprotection::aws:data-identifier/Name
+              - arn:aws:dataprotection::aws:data-identifier/IpAddress
+              - arn:aws:dataprotection::aws:data-identifier/DateOfBirth
+              - arn:aws:dataprotection::aws:data-identifier/PhoneNumber-US
+              - arn:aws:dataprotection::aws:data-identifier/ZipCode-US
+              - arn:aws:dataprotection::aws:data-identifier/Ssn-US
+              - arn:aws:dataprotection::aws:data-identifier/EmailAddress
+            Operation:
+              Deidentify:
+                MaskConfig:
+                  CustomValue:
+      RetentionInDays: "7"
+  GetUnderscoreorderLogGroup:
+    Type: AWS::Logs::LogGroup
+    Properties:
+      DataProtectionPolicy:
+        Name: GetOrderDataProtectionPolicy
+        Description: Get order data protection policy
+        Version: "2021-06-01"
+        Statement:
+          - Sid: "demo-audit-policy"
+            DataIdentifier:
+              - arn:aws:dataprotection::aws:data-identifier/Name
+              - arn:aws:dataprotection::aws:data-identifier/EmailAddress
+              - arn:aws:dataprotection::aws:data-identifier/IpAddress
+              - arn:aws:dataprotection::aws:data-identifier/ZipCode-US
+              - arn:aws:dataprotection::aws:data-identifier/PhoneNumber-US
+            Operation:
+              Audit:
+                FindingsDestination:
+                  CloudWatchLogs:
+                    LogGroup: !Ref DemoSensitiveDataLogGroup
+          - Sid: "demo-redact-policy"
+            DataIdentifier:
+              - arn:aws:dataprotection::aws:data-identifier/Name
+              - arn:aws:dataprotection::aws:data-identifier/EmailAddress
+              - arn:aws:dataprotection::aws:data-identifier/IpAddress
+              - arn:aws:dataprotection::aws:data-identifier/ZipCode-US
+              - arn:aws:dataprotection::aws:data-identifier/PhoneNumber-US
+            Operation:
+              Deidentify:
+                MaskConfig:
+                  CustomValue:
+      RetentionInDays: "7"
+  WarmUpPluginDefaultLogGroup:
+    Type: AWS::Logs::LogGroup
+    Properties:
+      RetentionInDays: "7"
   RDSDBCluster:
     Type: AWS::RDS::DBCluster
     Properties:
@@ -64,6 +141,7 @@ cf_resources:
               Service:
                 - lambda.amazonaws.com
                 - edgelambda.amazonaws.com
+                - sns.amazonaws.com
             Action: sts:AssumeRole
       ManagedPolicyArns:
         - arn:aws:iam::aws:policy/service-role/AWSLambdaVPCAccessExecutionRole
@@ -114,9 +192,24 @@ cf_resources:
                   - Ref: 'AWS::Region'
                   - Ref: 'AWS::AccountId'
                   - 'parameter/${self:custom.stage}/demo/*'
+          - Effect: Allow
+            Action:
+              - logs:PutDataProtectionPolicy
+              - logs:CreateLogDelivery
+              - logs:PutResourcePolicy
+              - logs:DescribeResourcePolicies
+              - logs:DescribeLogGroups
+            Resource: '*'
       Roles:
         - !Ref DemoServiceRole
-
+  DemoSNS:
+    Type: AWS::SNS::Topic
+    Properties:
+      TopicName: DemoLambdaAlertSNS
+      Subscription:
+        - Endpoint: mindosilalahi@gmail.com
+          Protocol: email
+      FifoTopic: false
 Outputs:
   RDSSecret:
     Value:
