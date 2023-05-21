@@ -207,7 +207,7 @@ cf_resources:
     Properties:
       TopicName: DemoLambdaAlertSNS
       Subscription:
-        - Endpoint: mindosilalahi@gmail.com
+        - Endpoint: demouser@example.com
           Protocol: email
       FifoTopic: false
 Outputs:
