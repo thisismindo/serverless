@@ -7,8 +7,9 @@
     "main": "index.js",
     "license": "ISC",
     "dependencies": {
-        "serverless": "^3.30.1",
+        "serverless": "^3.31.0",
         "serverless-plugin-warmup": "^8.2.1",
-        "serverless-offline": "^12.0.4"
+        "serverless-offline": "^12.0.4",
+        "serverless-plugin-aws-alerts": "^1.7.5"
     }
 }
