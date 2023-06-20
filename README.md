@@ -2,12 +2,12 @@
 A simple demonstration of aws lambda using python with api gateway and lambda layers resources.
 
 # Requirements
-- serverless >= 3.28.1
+- serverless >= 3.32.2
 - aws-cli >= 1.22.87
 - python >= 3.9.x
 - botocore >= 1.24.32
 - npm >= 9.6.0
-- node >= v19.6.1
+- node >= v20.3.0
 - pip >= 22.3.1
 
 # Setup
