@@ -31,11 +31,25 @@ jobs:
     - name: Run pylint
       run: |
         pylint src/
+  deploy-production:
+    name: production deployment
+    runs-on: ${{ matrix.os }}
+    needs: [build]
+    if: github.ref == 'refs/heads/main'
+    strategy:
+      matrix:
+        node-version: ["18.x"]
+        os: ["ubuntu-latest"]
+    steps:
+    - run: |
+        echo "@todo implement steps for production deployment"
   create-release:
     name: create release
     runs-on: ${{ matrix.os }}
+    permissions: write-all
     needs:
       - build
+      - deploy-production
     strategy:
       matrix:
         os: ["ubuntu-latest"]
