@@ -1,15 +1,15 @@
 {
     "name": "serverless-demo",
-    "version": "1.0.0",
+    "version": "v1.0.0",
     "description": "",
     "keywords": [],
     "author": "mindo silalahi",
     "main": "index.js",
     "license": "ISC",
     "dependencies": {
-        "serverless": "^3.34.0",
+        "serverless": "^3.35.2",
         "serverless-plugin-warmup": "^8.2.1",
-        "serverless-offline": "^12.0.4",
+        "serverless-offline": "^13.1.1",
         "serverless-plugin-aws-alerts": "^1.7.5"
     }
 }
