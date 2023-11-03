@@ -31,7 +31,7 @@ custom:
 
 provider:
   name: aws
-  runtime: python3.9
+  runtime: python3.10
   region: ${opt:region, 'us-west-2'}
   tags:
     service: ${self:custom.project_name}
