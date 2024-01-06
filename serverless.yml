@@ -20,6 +20,8 @@ custom:
           service: demo
           environment: ${self:custom.stage}
       prewarm: true
+      verbose: true
+      logRetentionInDays: 7
   alerts:
     dashboards: true
     topics:
@@ -28,6 +30,9 @@ custom:
     alarms:
       - functionThrottles
       - functionErrors
+  serverless-offline:
+    httpPort: 8080
+    resourceRoutes: true
 
 provider:
   name: aws
@@ -68,8 +73,8 @@ resources:
 
 plugins:
   - serverless-plugin-warmup
-  - serverless-offline
   - serverless-plugin-aws-alerts
+  - serverless-offline
 
 layers:
   ${file(layers.yml):layer}

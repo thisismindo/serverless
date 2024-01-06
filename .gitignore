@@ -1,6 +1,5 @@
 Pipfile
 Pipfile.lock
-package-lock.json
 .serverless/
 .warmup/
 .git/
