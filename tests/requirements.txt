@@ -1,2 +1,3 @@
 -r ../src/requirements.txt
-pylint==2.17.0
+pylint>=3.2.7
+astroid>=3.3.1
