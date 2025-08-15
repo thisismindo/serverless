@@ -61,14 +61,11 @@ jobs:
       - name: Get package version
         id: get_version
         run: |
-          content=$(cat package.json)
-          content="${content//'%'/'%25'}"
-          content="${content//$'\n'/'%0A'}"
-          content="${content//$'\r'/'%0D'}"
-          echo "packageJson=$content" >> $GITHUB_OUTPUT
+          version=$(jq -r '.version' package.json)
+          echo "version=$version" >> $GITHUB_OUTPUT
       - name: Create a Release
         uses: elgohr/Github-Release-Action@v5
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          title: ${{ fromJson(steps.get_version.outputs.packageJson).version }}
+          title: ${{ steps.get_version.outputs.version }}
