@@ -1,4 +1,4 @@
 boto3
-requests==2.31.0
+requests
 PyMySQL==1.1.0
 PyMySQL[rsa]

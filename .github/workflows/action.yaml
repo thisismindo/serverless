@@ -16,37 +16,40 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        python-version: ["3.9"]
+        python-version: ["3.12.11"]
         os: ["ubuntu-latest"]
     steps:
-    - uses: actions/checkout@v3
-    - name: Set up Python ${{ matrix.python-version }}
-      uses: actions/setup-python@v4
-      with:
-        python-version: ${{ matrix.python-version }}
-    - name: Install dependencies
-      uses: py-actions/py-dependency-install@v4
-      with:
-        path: "tests/requirements.txt"
-    - name: Run pylint
-      run: |
-        pylint src/
+      - uses: actions/checkout@v4
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v4
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: Install dependencies
+        uses: py-actions/py-dependency-install@v4
+        with:
+          path: "tests/requirements.txt"
+      - name: Run pylint
+        run: |
+          pylint src/
+
   deploy-production:
-    name: production deployment
+    name: Production Deployment
     runs-on: ${{ matrix.os }}
     needs: [build]
     if: github.ref == 'refs/heads/main'
     strategy:
       matrix:
-        node-version: ["18.x"]
+        node-version: ["23.x"]
         os: ["ubuntu-latest"]
     steps:
-    - run: |
-        echo "@todo implement steps for production deployment"
+      - run: |
+          echo "@todo implement steps for production deployment"
+
   create-release:
-    name: create release
+    name: Create Release
     runs-on: ${{ matrix.os }}
-    permissions: write-all
+    permissions:
+      contents: write
     needs:
       - build
       - deploy-production
@@ -54,17 +57,18 @@ jobs:
       matrix:
         os: ["ubuntu-latest"]
     steps:
-    - uses: actions/checkout@v3
-    - id: get_version
-      run: |
-        content=`cat package.json`
-        content="${content//'%'/'%25'}"
-        content="${content//$'\n'/'%0A'}"
-        content="${content//$'\r'/'%0D'}"
-        echo "::set-output name=packageJson::$content"
-    - name: Create a Release
-      uses: elgohr/Github-Release-Action@v5
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      with:
-        title: ${{fromJson(steps.get_version.outputs.packageJson).version}}
+      - uses: actions/checkout@v4
+      - name: Get package version
+        id: get_version
+        run: |
+          content=$(cat package.json)
+          content="${content//'%'/'%25'}"
+          content="${content//$'\n'/'%0A'}"
+          content="${content//$'\r'/'%0D'}"
+          echo "packageJson=$content" >> $GITHUB_OUTPUT
+      - name: Create a Release
+        uses: elgohr/Github-Release-Action@v5
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          title: ${{ fromJson(steps.get_version.outputs.packageJson).version }}

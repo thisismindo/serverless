@@ -1,7 +1,6 @@
-Pipfile
-Pipfile.lock
 .serverless/
 .warmup/
 .git/
-packages/python/lib/python3.9/site-packages/
+packages/
 node_modules/
+.vscode/

@@ -1,7 +1,6 @@
+org: itsmindo
 service: ${self:custom.project_name}
-frameworkVersion: '3'
-configValidationMode: error
-deprecationNotificationMode: warn:summary
+frameworkVersion: '4'
 
 custom:
   project_name: 'demo'
@@ -22,26 +21,20 @@ custom:
       prewarm: true
       verbose: true
       logRetentionInDays: 7
-  alerts:
-    dashboards: true
-    topics:
-      alarm:
-        topic: !Ref DemoSNS
-    alarms:
-      - functionThrottles
-      - functionErrors
   serverless-offline:
     httpPort: 8080
     resourceRoutes: true
 
 provider:
   name: aws
-  runtime: python3.10
-  region: ${opt:region, 'us-west-2'}
+  runtime: python3.12
+  region: us-west-2
   tags:
     service: ${self:custom.project_name}
     stage: ${self:custom.stage}
-  environment: ${file(serverless.env.yml):${self:custom.stage}.env}
+  environment:
+    stage: ${self:custom.stage}
+    service: ${self:service}
   deploymentBucket:
     name: ${file(serverless.env.yml):${self:custom.stage}.deployment_bucket_name}
     blockPublicAccess: true
@@ -54,13 +47,12 @@ provider:
 package:
   individually: false
   patterns:
-    - 'src/**'
+    - src/**
+    - '!.git/'
+    - '!packages/python/**'
     - '!node_modules/**'
-    - '!packages/**'
-    - '!/**'
     - '!README.md'
     - '!Pipfile'
-    - '!Pipfile.lock'
     - '!package.json'
     - '!package-lock.json'
     - '!resources.yml'
@@ -68,13 +60,12 @@ package:
     - '!lambdas.yml'
 
 resources:
-  Resources:
-    ${file(resources.yml):cf_resources}
+  ${file(resources.yml)}
 
 plugins:
   - serverless-plugin-warmup
-  - serverless-plugin-aws-alerts
   - serverless-offline
+  - serverless-python-requirements
 
 layers:
   ${file(layers.yml):layer}

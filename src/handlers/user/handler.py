@@ -1,5 +1,3 @@
-import os
-import requests
 from random import randrange
 from src.services.user.user_service import UserService
 

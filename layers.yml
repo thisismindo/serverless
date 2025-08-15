@@ -4,6 +4,6 @@ layer:
     name: demo_${self:custom.stage}_packages
     description: demo ${self:custom.stage} serverless packages
     compatibleRuntimes:
-      - python3.9
+      - python3.12
     allowedAccounts:
       - "*" #for demonstration purposes only
