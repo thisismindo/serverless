@@ -25,8 +25,7 @@ Resources:
               Audit:
                 FindingsDestination:
                   CloudWatchLogs:
-                    LogGroup:
-                      Ref: DemoSensitiveDataLogGroup
+                    LogGroup: !Ref DemoSensitiveDataLogGroup
           - Sid: "demo-redact-policy"
             DataIdentifier:
               - arn:aws:dataprotection::aws:data-identifier/Name
@@ -60,8 +59,7 @@ Resources:
               Audit:
                 FindingsDestination:
                   CloudWatchLogs:
-                    LogGroup:
-                      Ref: DemoSensitiveDataLogGroup
+                    LogGroup: !Ref DemoSensitiveDataLogGroup
           - Sid: "demo-redact-policy"
             DataIdentifier:
               - arn:aws:dataprotection::aws:data-identifier/Name
@@ -86,15 +84,13 @@ Resources:
       MasterUsername: admin
       ManageMasterUserPassword: true
       MasterUserSecret:
-        KmsKeyId:
-          Ref: KMSKey
+        KmsKeyId: !Ref KMSKey
       ServerlessV2ScalingConfiguration:
         MinCapacity: 0.5
         MaxCapacity: 5
       VpcSecurityGroupIds:
-        - vpc-security-group-id
-      DBSubnetGroupName:
-        Ref: RDSDBSubnetGroup
+        - sg-1234567890
+      DBSubnetGroupName: !Ref RDSDBSubnetGroup
   RDSDBSubnetGroup:
     Type: AWS::RDS::DBSubnetGroup
     Properties:
@@ -109,14 +105,12 @@ Resources:
     Properties:
       Engine: aurora-mysql
       DBInstanceClass: db.serverless
-      DBClusterIdentifier:
-        Ref: RDSDBCluster
+      DBClusterIdentifier: !Ref RDSDBCluster
   KSMAlias:
     Type: AWS::KMS::Alias
     Properties:
       AliasName: alias/DemoService${self:custom.stage}KMSAlias
-      TargetKeyId:
-        Ref: KMSKey
+      TargetKeyId: !Ref KMSKey
   KMSKey:
     Type: AWS::KMS::Key
     Properties:
@@ -124,8 +118,7 @@ Resources:
       EnableKeyRotation: True
       KeyPolicy:
         Version: '2012-10-17'
-        Id:
-          Ref: AWS::StackName
+        Id: !Ref AWS::StackName
         Statement:
           - Sid: "KMS admin"
             Effect: "Allow"
@@ -208,11 +201,7 @@ Resources:
               - logs:DescribeLogGroups
             Resource: '*'
       Roles:
-        Fn::Join:
-          - ':'
-          - - 'arn:aws:iam'
-            - 'your-account-id'
-            - Ref: DemoServiceRole
+        - !Ref DemoServiceRole
   DemoSNS:
     Type: AWS::SNS::Topic
     Properties:

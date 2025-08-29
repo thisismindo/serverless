@@ -58,6 +58,11 @@ package:
     - '!resources.yml'
     - '!layers.yml'
     - '!lambdas.yml'
+    - '!.github/**'
+    - '!.vscode/**'
+    - '!CODEOWNERS'
+    - '!LICENSE'
+    - '!Pipfile.lock'
 
 resources:
   ${file(resources.yml)}
